@@ -5,67 +5,76 @@
 // tTarget - transformation target - translatable element (f.e. panel)
 // dSTarget - drag-start target - draggable element (f.e. header of target panel)
 // dETarget - drag-end target - container within which is possible to perform dragging
-// xShift - initial shift by x-Axis (relatively to rendered place)
-// yShift - initial shift by y-Axis (relatively to rendered place)
+// initialX - initial shift by x-Axis (relatively to rendered place)
+// initialY - initial shift by y-Axis (relatively to rendered place)
 
-//add class 'no-dragging' to any child element to forbid child element to be draggable
+//add class 'no-dragging' (by default) to any child element to forbid child element to be draggable
 
 /*jslint browser:true */
-function _DnDMagic(config) {
-    var xShift,
-        yShift,
-        savedXShift,
-        savedYShift,
-        savedXOffsetForDnD,
-        savedYOffsetForDnD,
-        matrix = ['translate(', 0, 'px, ', 0, 'px)'],
-        dETarget = config.dETarget || document,
-        tTarget = config.tTarget,
-        onDragEndCallback = config.callback;
 
-    function _applyTransformation(newXShift, newYShift) {
-        matrix[1] = xShift = newXShift;
+_DnDFactory = (function () {
+    var mouseMoveEvent = 'mousemove',
+        mouseUpEvent = 'mouseup',
+        mouseDownEvent = 'mousedown',
+        noDraggingClass = 'no-dragging',
+        transformationMatrixTemplate = ['translate(', 0, 'px, ', 0, 'px)'];
 
-        matrix[3] = yShift = newYShift;
+    function _DnDMagic(config) {
+        var x,
+            y,
+            savedX,
+            savedY,
+            savedPageX,
+            savedPageY,
+            transformationMatrix = transformationMatrixTemplate.slice(),
+            dETarget = config.dETarget || document,
+            tTarget = config.tTarget,
+            onDragEndCallback = config.callback;
 
-        tTarget.style.transform = matrix.join('');
-    }
+        function _applyTransformation(newX, newY) {
+            transformationMatrix[1] = x = newX;
 
-    function _onStartDrag(event) {
-        if (event.button || event.target.classList.contains('no-dragging')) {
-            return;
+            transformationMatrix[3] = y = newY;
+
+            tTarget.style.transform = transformationMatrix.join('');
         }
 
-        savedXShift = xShift;
-        savedYShift = yShift;
+        function _onStartDrag(event) {
+            if (event.button || event.target.classList.contains(noDraggingClass)) {
+                return;
+            }
 
-        savedXOffsetForDnD = event.pageX;
-        savedYOffsetForDnD = event.pageY;
+            savedX = x;
+            savedY = y;
 
-        dETarget.addEventListener('mousemove', _onDoDrag);
+            savedPageX = event.pageX;
+            savedPageY = event.pageY;
 
-        dETarget.addEventListener('mouseup', _onEndDrag);
-    }
+            dETarget.addEventListener(mouseMoveEvent, _onDoDrag);
 
-    function _onDoDrag(event) {
-        _applyTransformation(savedXShift + event.pageX - savedXOffsetForDnD, savedYShift + event.pageY - savedYOffsetForDnD);
-    }
-
-    function _onEndDrag() {
-        if (onDragEndCallback) {
-            onDragEndCallback(xShift, yShift);
+            dETarget.addEventListener(mouseUpEvent, _onEndDrag);
         }
 
-        dETarget.removeEventListener('mousemove', _onDoDrag);
+        function _onDoDrag(event) {
+            _applyTransformation(savedX + event.pageX - savedPageX, savedY + event.pageY - savedPageY);
+        }
 
-        dETarget.removeEventListener('mouseup', _onEndDrag);
+        function _onEndDrag() {
+            if (onDragEndCallback) {
+                onDragEndCallback(x, y);
+            }
+
+            dETarget.removeEventListener(mouseMoveEvent, _onDoDrag);
+
+            dETarget.removeEventListener(mouseUpEvent, _onEndDrag);
+        }
+
+        config.dSTarget.addEventListener(mouseDownEvent, _onStartDrag);
+
+        _applyTransformation(config.initialX || 0, config.initialY || 0);
     }
 
-    config.dSTarget.addEventListener('mousedown', _onStartDrag);
-
-    _applyTransformation(config.xShift || 0, config.yShift || 0);
-}
-
-/*module.exports = */function _DnDFactory(config) {
-    return new _DnDMagic(config);
-}
+    return function _DnDFactory(config) {
+        return new _DnDMagic(config);
+    }
+})();

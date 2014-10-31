@@ -1,0 +1,33 @@
+<title>dnd-test</title>
+<script src="dnd.js"></script>
+<div id="red-div"></div>
+<div id="blue-div"></div>
+<style>
+    div {
+        width:200px;
+        height: 200px;
+    }
+
+    #red-div {
+        background-color: red;
+    }
+
+    #blue-div {
+        background-color: blue;
+    }
+</style>
+<script>
+    _DnDFactory({
+        tTarget: document.querySelector('#red-div'),
+        callback: function () {
+            console.log('red moved');
+        }
+    });
+    _DnDFactory({
+        tTarget: document.querySelector('#blue-div'),
+        initialY: 300,
+        callback: function () {
+            console.log('blue moved');
+        }
+    });
+</script>

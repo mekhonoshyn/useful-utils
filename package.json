@@ -1,0 +1,11 @@
+{
+    "name": "useful-utils",
+    "version": "0.0.1",
+    "author": "mekhonoshyn",
+    "description": "some useful independent utils",
+    "license": "The MIT License (MIT)",
+    "repository" : {
+        "type" : "git",
+        "url" : "https://github.com/mekhonoshyn/useful-utils.git"
+    }
+}

@@ -19,13 +19,14 @@
 <script>
     _DnDFactory({
         tTgt: document.querySelector('#red-div'),
+        iX: 50,
         onDrop: function () {
             console.log('red moved');
         }
     });
     _DnDFactory({
         tTgt: document.querySelector('#blue-div'),
-        initialY: 300,
+        iY: 300,
         onDrop: function () {
             console.log('blue moved');
         }

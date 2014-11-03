@@ -18,15 +18,15 @@
 </style>
 <script>
     _DnDFactory({
-        tTarget: document.querySelector('#red-div'),
-        callback: function () {
+        tTgt: document.querySelector('#red-div'),
+        onDrop: function () {
             console.log('red moved');
         }
     });
     _DnDFactory({
-        tTarget: document.querySelector('#blue-div'),
+        tTgt: document.querySelector('#blue-div'),
         initialY: 300,
-        callback: function () {
+        onDrop: function () {
             console.log('blue moved');
         }
     });

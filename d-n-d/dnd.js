@@ -3,12 +3,12 @@
  */
 
 /**
- * tTarget  - (required) -  transformation target - translatable element (f.e. panel)
- * dSTarget -               drag-start target - draggable element (f.e. header of target panel)
- * dETarget -               drag-end target - container within which is possible to perform dragging
- * initialX -               initial shift by x-Axis (relatively to rendered place)
- * initialY -               initial shift by y-Axis (relatively to rendered place)
- * callback -               if provided will be executed on each drag-end event with passing final X and Y
+ * tTgt   - (required) -          - transformation target - translatable element (f.e. panel)
+ * gTgt   -            - tTgt     - grab target - draggable element (f.e. header of target panel)
+ * dTgt   -            - document - drop target - container within which is possible to perform dragging
+ * iX     -            - 0        - initial X transformation (relatively to rendered place)
+ * iY     -            - 0        - initial Y transformation (relatively to rendered place)
+ * onDrop -            -          - if provided will be executed on each drop event with passing final X and Y
  */
 
 /**
@@ -21,26 +21,36 @@ _DnDFactory = (function _DnDFactoryInitializer() {
         mouseUpEvent = 'mouseup',
         mouseDownEvent = 'mousedown',
         noDraggingClass = 'no-dragging',
-        transformationMatrixTemplate = ['translate(', 0, 'px, ', 0, 'px)'],
+        transformationMatrixTemplate = [ 'translate(', 0, 'px, ', 0, 'px)' ],
         eventListenerToken = 'EventListener',
-        eventTargetPrototype = EventTarget.prototype;
+        eventTargetPrototype = EventTarget.prototype,
+        eventPrototype = Event.prototype;
 
     eventTargetPrototype._on = eventTargetPrototype['add' + eventListenerToken];
     eventTargetPrototype._un = eventTargetPrototype['remove' + eventListenerToken];
 
-    function _DnDMagic(tTarget, dETarget, dSTarget, initialX, initialY, onDragEndCallback) {
+    eventPrototype._pd = eventPrototype.preventDefault;
+    eventPrototype._sip = eventPrototype.stopImmediatePropagation;
+
+    return function _DnDMagic(config) {
         var x,
             y,
             savedX = 0,
             savedY = 0,
             savedPageX = 0,
             savedPageY = 0,
-            transformationMatrix = transformationMatrixTemplate.slice();
+            transformationMatrix = transformationMatrixTemplate.slice(),
+            transformTargetStyle = config.tTgt.style,
+            dTgt = config.dTgt || document,
+            onDropCallback = config.onDrop;
 
-        function _onStartDrag(event) {
+        function _onGrab(event) {
             if (event.button || event.target.classList.contains(noDraggingClass)) {
                 return;
             }
+
+            event._pd();
+            event._sip();
 
             savedX = x;
             savedY = y;
@@ -48,45 +58,36 @@ _DnDFactory = (function _DnDFactoryInitializer() {
             savedPageX = event.pageX;
             savedPageY = event.pageY;
 
-            dETarget._on(mouseMoveEvent, _onDoDrag);
+            dTgt._on(mouseMoveEvent, _onDrag);
 
-            dETarget._on(mouseUpEvent, _onEndDrag);
+            dTgt._on(mouseUpEvent, _onDrop);
         }
 
-        function _onDoDrag(event) {
+        function _onDrag(event) {
+            event._sip && event._sip();
+
             transformationMatrix[1] = x = savedX + event.pageX - savedPageX;
 
             transformationMatrix[3] = y = savedY + event.pageY - savedPageY;
 
-            tTarget.style.transform = transformationMatrix.join('');
+            transformTargetStyle.transform = transformationMatrix.join('');
         }
 
-        function _onEndDrag() {
-            if (onDragEndCallback) {
-                onDragEndCallback(x, y);
-            }
+        function _onDrop(event) {
+            event._sip();
 
-            dETarget._un(mouseMoveEvent, _onDoDrag);
+            onDropCallback && onDropCallback(x, y);
 
-            dETarget._un(mouseUpEvent, _onEndDrag);
+            dTgt._un(mouseMoveEvent, _onDrag);
+
+            dTgt._un(mouseUpEvent, _onDrop);
         }
 
-        dSTarget._on(mouseDownEvent, _onStartDrag);
+        (config.gTgt || config.tTgt)._on(mouseDownEvent, _onGrab);
 
-        _onDoDrag({
-            pageX: initialX,
-            pageY: initialY
+        _onDrag({
+            pageX: config.iX || 0,
+            pageY: config.iY || 0
         });
-    }
-
-    return function _DnDFactory(config) {
-        return new _DnDMagic(
-            config.tTarget,
-            config.dETarget || document,
-            config.dSTarget || config.tTarget,
-            config.initialX || 0,
-            config.initialY || 0,
-            config.callback
-        );
-    }
+    };
 })();

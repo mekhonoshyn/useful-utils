@@ -3,7 +3,7 @@
  */
 
 var gulp = require( 'gulp' ),
-    distDir = '../../public/d-n-d',
+    distDir = '../../public/useful-utils/js',
     del = require( 'del' ),
     runSeq = require( 'run-sequence' );
 
@@ -12,7 +12,7 @@ gulp.task('clean', function (cb) {
 });
 
 gulp.task('copy', function () {
-    return gulp.src( 'js/*.js' ).pipe(gulp.dest(distDir));
+    return gulp.src( 'js/**/*.js' ).pipe(gulp.dest(distDir));
 });
 
 gulp.task('default', function (cb) {

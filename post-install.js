@@ -4,7 +4,7 @@
 
 var gulp = require( 'gulp' ),
     path = require('path'),
-    distDir = path.join(__dirname, '..', '..', 'public', 'useful-utils', 'lib'),
+    distDir = path.join(__dirname, '..', '..', 'public', 'useful-utils'),
     srcMask = path.join('lib', '**', '*.js'),
     del = require( 'del' ),
     runSeq = require( 'run-sequence' );

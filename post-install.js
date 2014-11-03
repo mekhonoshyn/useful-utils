@@ -12,7 +12,7 @@ gulp.task('clean', function (cb) {
 });
 
 gulp.task('copy', function () {
-    return gulp.src( '**/*.js' ).pipe(gulp.dest(distDir));
+    return gulp.src( 'js/*.js' ).pipe(gulp.dest(distDir));
 });
 
 gulp.task('default', function (cb) {

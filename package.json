@@ -4,6 +4,9 @@
     "author": "mekhonoshyn",
     "description": "some useful independent utils",
     "license": "The MIT License (MIT)",
+    "scripts": {
+        "postinstall": "gulp --gulpfile post-install.js"
+    },
     "repository" : {
         "type" : "git",
         "url" : "https://github.com/mekhonoshyn/useful-utils.git"

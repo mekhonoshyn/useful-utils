@@ -10,7 +10,9 @@ var gulp = require( 'gulp' ),
     runSeq = require( 'run-sequence' );
 
 gulp.task('clean', function (cb) {
-    return del(distDir, cb);
+    return del(distDir, {
+        force: true
+    }, cb);
 });
 
 gulp.task('copy', function () {

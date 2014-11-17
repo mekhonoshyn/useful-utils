@@ -2,7 +2,7 @@
  * created by mekhonoshyn on 11/3/14.
  */
 
-var gulp = require( 'gulp' ),
+var gulp = require('gulp'),
     path = require('path'),
     distDir = path.join(__dirname, '..', '..', 'public', 'useful-utils'),
     srcMask = path.join('lib', '**', '*.js'),

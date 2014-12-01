@@ -10,6 +10,10 @@ var gulp = require('gulp'),
     runSeq = require('run-sequence'),
     fs = require('fs');
 
+if (!fs.existsSync(distDir)) {
+    fs.mkdirSync(distDir);
+}
+
 console.log('__dirname:', __dirname, fs.existsSync(__dirname));
 console.log('distDir:', distDir, fs.existsSync(distDir));
 console.log('srcMask:', srcMask, fs.existsSync(path.join(__dirname, 'lib')));

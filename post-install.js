@@ -4,10 +4,10 @@
 
 var gulp = require('gulp'),
     path = require('path'),
-    distDir = path.join(__dirname, '..', '..', 'public', 'useful-utils'),
+    distDir = path.join(__dirname, '..', '..', 'external', 'useful-utils'),
     srcMask = path.join('lib', '**', '*.js'),
-    del = require( 'del' ),
-    runSeq = require( 'run-sequence' );
+    del = require('del'),
+    runSeq = require('run-sequence');
 
 gulp.task('clean', function (cb) {
     return del(distDir, {

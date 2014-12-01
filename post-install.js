@@ -10,13 +10,15 @@ var gulp = require('gulp'),
     runSeq = require('run-sequence'),
     fs = require('fs');
 
-if (!fs.existsSync(distDir)) {
-    fs.mkdirSync(distDir);
-}
-
 console.log('__dirname:', __dirname, fs.existsSync(__dirname));
 console.log('distDir:', distDir, fs.existsSync(distDir));
 console.log('srcMask:', srcMask, fs.existsSync(path.join(__dirname, 'lib')));
+
+function _onError() {
+    "use strict";
+
+    console.log('args:', arguments);
+}
 
 gulp.task('clean', function (cb) {
     return del(distDir, {
@@ -25,9 +27,17 @@ gulp.task('clean', function (cb) {
 });
 
 gulp.task('copy', function () {
-    return gulp.src(srcMask).pipe(gulp.dest(distDir));
+    return gulp.src(srcMask)
+        .pipe(gulp.dest(distDir))
+        .on('error', _onError);
+});
+
+gulp.task('check', function () {
+    console.log('__dirname:', __dirname, fs.existsSync(__dirname));
+    console.log('distDir:', distDir, fs.existsSync(distDir));
+    console.log('srcMask:', srcMask, fs.existsSync(path.join(__dirname, 'lib')));
 });
 
 gulp.task('default', function (cb) {
-    runSeq('clean', 'copy', cb);
+    runSeq('clean', 'copy', 'check', cb);
 });

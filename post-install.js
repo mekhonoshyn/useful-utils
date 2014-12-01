@@ -9,6 +9,9 @@ var gulp = require('gulp'),
     del = require('del'),
     runSeq = require('run-sequence');
 
+console.log('distDir:', distDir);
+console.log('srcMask:', srcMask);
+
 gulp.task('clean', function (cb) {
     return del(distDir, {
         force: true

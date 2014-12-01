@@ -3,11 +3,11 @@
  */
 
 var gulp = require('gulp'),
-    path = require('path'),
-    distDir = path.join(__dirname, 'external', 'useful-utils'),
-    srcMask = path.join(__dirname, 'node_modules', 'useful-utils', 'lib', '**', '*.js'),
-    del = require('del'),
-    runSeq = require('run-sequence');
+path = require('path'),
+distDir = path.join(__dirname, '..', '..', 'external', 'useful-utils'),
+srcMask = path.join(__dirname, 'lib', '**', '*.js'),
+del = require('del'),
+runSeq = require('run-sequence');
 
 console.log('distDir:', distDir);
 console.log('srcMask:', srcMask);

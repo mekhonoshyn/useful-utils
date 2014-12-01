@@ -3,14 +3,16 @@
  */
 
 var gulp = require('gulp'),
-path = require('path'),
-distDir = path.join(__dirname, '..', '..', 'external', 'useful-utils'),
-srcMask = path.join(__dirname, 'lib', '**', '*.js'),
-del = require('del'),
-runSeq = require('run-sequence');
+    path = require('path'),
+    distDir = path.join(__dirname, '..', '..', 'external', 'useful-utils'),
+    srcMask = path.join(__dirname, 'lib', '**', '*.js'),
+    del = require('del'),
+    runSeq = require('run-sequence'),
+    fs = require('fs');
 
-console.log('distDir:', distDir);
-console.log('srcMask:', srcMask);
+console.log('__dirname:', __dirname, fs.existsSync(__dirname));
+console.log('distDir:', distDir, fs.existsSync(distDir));
+console.log('srcMask:', srcMask, fs.existsSync(path.join(__dirname, 'lib')));
 
 gulp.task('clean', function (cb) {
     return del(distDir, {

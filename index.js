@@ -50,6 +50,7 @@ var _serverModules = [
     'defineRO',
     'EventTarget',
     'hash',
+    'isArray',
     'ModelMgr',
     'print',
     'WSSrv'
@@ -63,6 +64,7 @@ var _dependencies = {
     ],
     DateTime: [
         'defineRO',
+        'isArray',
         'BindingLayer',
         'EventTarget'
     ],
@@ -73,9 +75,11 @@ var _dependencies = {
         'define'
     ],
 //    hash: [],
+//    isArray: [],
     ModelMgr: [
         'define',
         'hash',
+        'isArray',
         'print'
     ],
 //    print: [],

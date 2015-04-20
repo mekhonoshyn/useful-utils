@@ -56,7 +56,7 @@ var _serverModules = [
     'WSSrv'
 ];
 
-var _dependencies = {
+var _moduleDependencies = {
     BindingLayer: [
         'hash',
         'print',
@@ -121,7 +121,7 @@ var _builders = {
     },
     server: function _buildForServer(destination, required) {
         function _serverWrapper(moduleName, content) {
-            var _dependencies = (_dependencies[moduleName] || []).map(function _map(sub) {
+            var _dependencies = (_moduleDependencies[moduleName] || []).map(function _map(sub) {
                 return '_' + sub + ' = require(\'./' + sub + '\')'
             });
 
@@ -151,7 +151,7 @@ function _collectSubs(subModules) {
     return subModules.map(function _map(module) {
         return {
             module: module,
-            subs: _collectSubs(_dependencies[module] || [])
+            subs: _collectSubs(_moduleDependencies[module] || [])
         };
     });
 }

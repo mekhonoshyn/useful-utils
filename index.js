@@ -121,12 +121,12 @@ var _builders = {
     },
     server: function _buildForServer(destination, required) {
         function _serverWrapper(moduleName, content) {
-            var dependencies = (_dependencies[moduleName] || []).map(function _map(sub) {
+            var _dependencies = (_dependencies[moduleName] || []).map(function _map(sub) {
                 return '_' + sub + ' = require(\'./' + sub + '\')'
             });
 
             return [
-                dependencies.length ? ('var ' + dependencies.join(',\n    ') + ';') : '',
+                _dependencies.length ? ('var ' + _dependencies.join(',\n    ') + ';') : '',
                 content,
                 'module.exports = _' + moduleName + ';'
             ].filter(Boolean).join('\n\n');

@@ -75,6 +75,7 @@ var _moduleDependencies = {
         'define'
     ],
 //    hash: [],
+//    'dom/HTMLSelectWrapper': [],
 //    isArray: [],
     ModelMgr: [
         'define',
